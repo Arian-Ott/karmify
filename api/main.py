@@ -13,12 +13,9 @@ def startup():
         Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
+
 app.add_event_handler("startup", startup)
 
 
 if __name__ == "__main__":
-   
     uvicorn.run(app, host="0.0.0.0", port=4567)
-    
-    
-    
