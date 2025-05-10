@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from config import settings
+from api.config import settings
 import uvicorn
-from db import get_db, Base, engine
-from models.users import User
+from api.db import get_db, Base, engine
+
 
 app = FastAPI()
 
