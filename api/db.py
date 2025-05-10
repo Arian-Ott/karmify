@@ -19,6 +19,6 @@ def get_db():
         db.commit()
     except Exception as e:
         db.rollback()
-        logging.error(f"Database error: {e}")
+        raise
     finally:
         db.close()
