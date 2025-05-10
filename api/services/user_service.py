@@ -72,3 +72,21 @@ class User:
                 user_id=str(user.id),
                 date_created=str(user.created_at),
             )
+
+    @staticmethod
+    def authenticate_user(username: str, password: str):
+        with get_db() as db:
+            user = db.query(UserTable).filter(UserTable.username == username).first()
+            if not user:
+                return False
+            if not crypto_context.verify(password.encode(), user.hashed_password):
+                return False
+            return dict(
+                UserCreate(
+                    username=user.username,
+                    email=user.email,
+                    password=user.hashed_password,
+                    user_id=str(user.id),
+                    date_created=str(user.created_at),
+                )
+            )

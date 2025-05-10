@@ -8,6 +8,9 @@ class Settings(BaseSettings):
     MYSQL_USER: str = "karmify"
     MYSQL_PASSWORD: str = "karmify"
     MYSQL_DATABASE: str = "karmify"
+    SECRET_KEY: str = "your-secret-key"  # Use a strong, unpredictable key in production
+    ALGORITHM: str = "HS512"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
     @property
     def mysql_url(self):
