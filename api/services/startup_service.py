@@ -26,7 +26,6 @@ def create_roles():
                 continue
             db.add(role)
         db.commit()
-  
 
 
 def create_admin_user():
@@ -39,6 +38,7 @@ def create_admin_user():
     user.set_email("admin@example.com")
     user.set_password("admin")
     user.create_user()
+
 
 def assign_admin_role():
     with get_db() as db:
@@ -60,6 +60,7 @@ def assign_admin_role():
         user_role = UserRoleTable(user_id=user.id, role_name=role.name)
         db.add(user_role)
         db.commit()
+
 
 def startup():
     """Startup event handler."""
