@@ -8,7 +8,14 @@ class UserBase(BaseModel):
     )
     password: str = Field(min_length=8, max_length=100, default="hallo1234!")
 
+    class Config:
+        from_attributes = True
+
 
 class UserCreate(UserBase):
     user_id: str
     date_created: str
+
+
+class UserReturn(UserBase):
+    role: str
