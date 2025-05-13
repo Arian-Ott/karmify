@@ -17,7 +17,12 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         )
 
     # Make sure user_data is a dict or Pydantic model, not a detached ORM object
-    access_token = create_access_token(data={"sub": user_data["username"]})
+    access_token = create_access_token(
+        data={
+            "sub": user_data["username"],
+            "role": User.get_roles(user_data["username"]),
+        }
+    )
     return {"access_token": access_token, "token_type": "bearer"}
 
 

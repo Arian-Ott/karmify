@@ -30,7 +30,8 @@ def has_role(token: str, role: str):
     if not payload:
         raise HTTPException(status_code=401, detail="Invalid token")
     user_role = payload.get("role")
-    if user_role != role:
+
+    if role not in user_role:
         return False
 
     return True

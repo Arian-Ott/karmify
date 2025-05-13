@@ -44,6 +44,7 @@ async def get_all_users(token: str = Depends(oauth2_scheme)):
     user_service = User()
     try:
         users = user_service.get_all_users()
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     return users

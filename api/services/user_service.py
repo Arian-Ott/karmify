@@ -1,5 +1,7 @@
 from api.models.users import UserTable
+from api.models.roles import UserRoleTable, RoleTable
 from api.schemas.user_schema import UserBase, UserCreate
+from api.schemas.role_schema import RoleBase
 from sqlalchemy.orm import Session
 from api.db import get_db
 from uuid import UUID
@@ -105,3 +107,22 @@ class User:
                 )
                 for user in users
             ]
+
+    @staticmethod
+    def get_roles(username: str):
+        with get_db() as db:
+            user = db.query(UserTable).filter(UserTable.username == username).first()
+            if not user:
+                raise ValueError("User not found")
+            roles = (
+                db.query(UserRoleTable).filter(UserRoleTable.user_id == user.id).all()
+            )
+            roles = (
+                db.query(RoleTable)
+                .filter(RoleTable.name.in_([role.role_name for role in roles]))
+                .all()
+            )
+            if not roles:
+                return []
+            print(list(roles))
+            return [role.name for role in roles]
