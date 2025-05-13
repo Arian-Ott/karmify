@@ -1,1 +1,38 @@
+services:
+  maria:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: karmify
+      MYSQL_DATABASE: karmify
+      MYSQL_USER: karmify
+      MYSQL_PASSWORD: karmify
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - default
+  pma:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: maria
+      PMA_USER: karmify
+      PMA_PASSWORD: karmify
+    ports:
+      - "8080:80"
+    depends_on:
+      - maria
+    networks:
+      - default
+volumes:
+  mariadb_data:
+    driver: local
 
+networks:
+  default:
+    driver: bridge
+   

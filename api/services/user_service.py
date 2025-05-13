@@ -90,3 +90,18 @@ class User:
                     date_created=str(user.created_at),
                 )
             )
+
+    @staticmethod
+    def get_all_users():
+        with get_db() as db:
+            users = db.query(UserTable).all()
+            return [
+                UserCreate(
+                    username=user.username,
+                    email=user.email,
+                    password=user.hashed_password,
+                    user_id=str(user.id),
+                    date_created=str(user.created_at),
+                )
+                for user in users
+            ]
