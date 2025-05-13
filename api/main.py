@@ -4,17 +4,11 @@ import uvicorn
 from api.db import get_db, Base, engine
 from api.routes.user_router import user_router
 from api.routes.auth_router import oauth_router
+from api.services.startup_service import startup
 
 app = FastAPI()
 app.include_router(user_router)
 app.include_router(oauth_router)
-
-
-def startup():
-    """Startup event handler."""
-    if settings.DEBUG:
-        Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
 
 
 app.add_event_handler("startup", startup)
