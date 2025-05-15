@@ -6,7 +6,7 @@ on:
 
 jobs:
   docker:
-    runs-on: docker  # requires a Gitea runner with Docker support
+    runs-on: ubuntu  # requires a Gitea runner with Docker support
 
     steps:
       - name: Checkout code
