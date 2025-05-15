@@ -21,6 +21,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
         data={
             "sub": user_data["username"],
             "role": User.get_roles(user_data["username"]),
+            "uid": user_data["user_id"],
         }
     )
     return {"access_token": access_token, "token_type": "bearer"}
