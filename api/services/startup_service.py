@@ -4,6 +4,39 @@ from api.db import get_db
 from api.services.user_service import User
 from api.config import settings
 from api.db import Base, engine
+from api.config import settings
+import pandas as pd
+
+USER_CSV = settings.IMPORT_DIR + "/users.csv"
+
+
+def csv_reader(path):
+    df = pd.read_csv(path)
+    users = df.to_dict(orient="records")
+    return users
+
+
+def check_user_exists(username, email):
+    with get_db() as db:
+        if db.query(UserTable).filter(UserTable.username == username).first():
+            return True
+        if db.query(UserTable).filter(UserTable.email == email).first():
+            return True
+    return False
+
+
+def create_users():
+    users = csv_reader(USER_CSV)
+
+    for user in users:
+        print(user["username"])
+        if check_user_exists(user["username"], user["email"]):
+            continue
+        usr = User()
+        usr.set_username(user["username"])
+        usr.set_password(user["password"])
+        usr.set_email(user["email"])
+        usr.create_user()
 
 
 def table_creation():
@@ -64,7 +97,9 @@ def assign_admin_role():
 
 def startup():
     """Startup event handler."""
+    csv_reader(USER_CSV)
     table_creation()
     create_roles()
     create_admin_user()
     assign_admin_role()
+    create_users()

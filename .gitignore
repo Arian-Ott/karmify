@@ -4,3 +4,5 @@
 **/*.pyc
 **/*.env
 .ruff_cache
+api/data/assets/*
+!api/data/assets/nnonftscam.png

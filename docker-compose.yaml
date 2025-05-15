@@ -1,4 +1,14 @@
 services:
+  api:
+    build: .
+    env_file:
+      - .env
+    ports:
+      - "4567:4567"
+    networks:
+      - default
+    volumes:
+      - karmify_be:/app/api/data
   maria:
     image: mariadb:latest
     container_name: mariadb
@@ -31,6 +41,7 @@ services:
 volumes:
   mariadb_data:
     driver: local
+  karmify_be:
 
 networks:
   default:

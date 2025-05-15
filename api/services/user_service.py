@@ -39,7 +39,7 @@ class User:
                 raise ValueError("User not found")
 
     @staticmethod
-    def get_by_username(db, username: str):
+    def get_by_username(username: str):
         with get_db() as db:
             return db.query(UserTable).filter(UserTable.username == username).first()
 
