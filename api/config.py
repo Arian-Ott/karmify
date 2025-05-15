@@ -11,6 +11,8 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "your-secret-key"  # Use a strong, unpredictable key in production
     ALGORITHM: str = "HS512"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ASSET_DIR: str = "api/data/assets"
+    IMPORT_DIR: str = "api/data/import"
 
     @property
     def mysql_url(self):
