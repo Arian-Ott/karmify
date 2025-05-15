@@ -1,0 +1,11 @@
+.venv
+venv
+.ruff_cache
+**/__pycache__/
+api/data/assets/*
+!api/data/assets/nnonftscam.png
+.env
+**/*.md
+.gitignore
+docs/
+.gitignore
