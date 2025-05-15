@@ -33,8 +33,8 @@ async def register_user(user: UserBase):
     responses={
         200: {
             "description": "Users retrieved successfully",
-            401: {"description": "Unauthorised, admin only"},
-        }
+        },
+        401: {"description": "Unauthorised, admin only"},
     },
 )
 async def get_all_users(token: str = Depends(oauth2_scheme)):
