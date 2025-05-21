@@ -54,6 +54,7 @@ async def set_pfp(
     return {"message": "Profile picture uploaded"}
 
 
+
 @static_router.get("/u/{user_id}")
 async def get_pfp(user_id: str):
     path = os.path.join(settings.ASSET_DIR, f"{user_id}.webp")
