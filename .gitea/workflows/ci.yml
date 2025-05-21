@@ -20,3 +20,4 @@ jobs:
 
       - name: Push Docker image
         run: docker push your.registry.local/myproject/backend:latest
+
