@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from api.services.jwt import create_access_token, verify_token
 from api.services.user_service import User
+from fastapi.responses import Response
 
 oauth_router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -45,3 +46,24 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
             status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
         )
     return {"user": payload["sub"]}
+
+
+@oauth_router.delete("/me")
+async def delete_current_user(response:Response, token: str = Depends(oauth2_scheme),):
+    payload = verify_token(token)
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
+        )
+    if "admin" in payload["role"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN, detail="Admin cannot delete self"
+        )
+    user = User.get_by_username(payload["sub"])
+    
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    User.delete_user(payload["uid"])
+    response.delete_cookie("access_token")
+    
+    return {"detail": "User deleted"}

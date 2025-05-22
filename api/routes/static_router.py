@@ -6,7 +6,7 @@ from uuid import UUID
 import zlib
 import os
 from api.config import settings
-
+from api.services.importing_service import handler
 from api.routes.auth_router import oauth2_scheme
 from api.services.jwt import verify_token
 
@@ -74,3 +74,14 @@ async def delete_pfp(user_id, token: str = Depends(oauth2_scheme)):
         raise HTTPException(404, detail="Image not found")
     os.remove(settings.ASSET_DIR + f"/{user_id}.webp")
     return "image deleted"
+
+@static_router.post("/bulk_import")
+async def bulk_import(
+    token: str = Depends(oauth2_scheme),
+):
+    data = verify_token(token)
+    if data is None or "admin" not in data.get("role"): 
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    
+    await handler()
+    return {"message": "Bulk import completed"}

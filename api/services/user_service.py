@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from api.db import get_db
 from uuid import UUID
 from . import crypto_context
-
+import os
 
 class User:
     def __init__(self):
@@ -126,3 +126,15 @@ class User:
                 return []
             print(list(roles))
             return [role.name for role in roles]
+        
+    @staticmethod
+    def delete_user(user_id):
+        user_id = UUID(user_id)
+        with get_db() as db:
+            user = db.query(UserTable).filter(UserTable.id == user_id).first()
+            if not user:
+                raise ValueError("User not found")
+            db.delete(user)
+            db.commit()
+        if os.path.exists(f"api/static/uploads/{user_id}.webp"):
+            os.remove(f"api/static/uploads/{user_id}.webp")

@@ -8,29 +8,7 @@ from api.config import settings
 import pandas as pd
 import os
 import shutil
-USER_CSV = settings.IMPORT_DIR + "/users.csv"
-
-
-def csv_reader(path):
-    df = pd.read_csv(path)
-    users = df.to_dict(orient="records")
-    return users
-
-def copy_jpg_to_assets():
-
-
-    source_dir = ""    
-    dest_dir = settings.IMPORT_DIR 
-
-    if not os.path.exists(dest_dir):
-        os.makedirs(dest_dir)
-
-    for filename in os.listdir(source_dir):
-        if filename.endswith(".jpg"):
-            shutil.copy(os.path.join(source_dir, filename), dest_dir)
-            print(f"Copied {filename} to {dest_dir}")
-        else:
-            print(f"Skipped {filename}, not a .jpg file")
+import csv
 
 def check_user_exists(username, email):
     with get_db() as db:
@@ -41,18 +19,6 @@ def check_user_exists(username, email):
     return False
 
 
-def create_users():
-    users = csv_reader(USER_CSV)
-
-    for user in users:
-        print(user["username"])
-        if check_user_exists(user["username"], user["email"]):
-            continue
-        usr = User()
-        usr.set_username(user["username"])
-        usr.set_password(user["password"])
-        usr.set_email(user["email"])
-        usr.create_user()
 
 
 def table_creation():
@@ -113,10 +79,10 @@ def assign_admin_role():
 
 def startup():
     """Startup event handler."""
-    csv_reader(USER_CSV)
+
     table_creation()
     create_roles()
     create_admin_user()
     assign_admin_role()
-    copy_jpg_to_assets()
-    create_users()
+
+
