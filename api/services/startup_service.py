@@ -10,6 +10,7 @@ import os
 import shutil
 import csv
 
+
 def check_user_exists(username, email):
     with get_db() as db:
         if db.query(UserTable).filter(UserTable.username == username).first():
@@ -17,8 +18,6 @@ def check_user_exists(username, email):
         if db.query(UserTable).filter(UserTable.email == email).first():
             return True
     return False
-
-
 
 
 def table_creation():
@@ -84,5 +83,3 @@ def startup():
     create_roles()
     create_admin_user()
     assign_admin_role()
-
-
