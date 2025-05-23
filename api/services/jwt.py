@@ -10,6 +10,8 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
         expires_delta or timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     to_encode.update({"exp": expire})
+    to_encode.update({"iat": datetime.now()})
+    
     return jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
 
@@ -21,6 +23,8 @@ def verify_token(token: str):
         return payload
     except JWTError:
         return None
+
+
 
 
 def has_role(token: str, role: str):
