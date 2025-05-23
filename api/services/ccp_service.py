@@ -2,6 +2,7 @@ from api.models.ccp import CCPLog, CCPCategories
 from api.models.users import UserTable
 from api.services.user_service import User
 from api.db import get_db
+from sqlalchemy import func
 from uuid import UUID
 
 
@@ -75,6 +76,21 @@ class CCPLogService:
 class CCPService:
     def __init__(self):
         pass
+
+    @staticmethod
+    def get_sum_points(user_id):
+        """
+        Get the total points for a specific user.
+        """
+        with get_db() as db:
+            if not db.query(UserTable).filter(UserTable.id == UUID(user_id)).first():
+                raise ValueError("User not found")
+            return (
+                db.query(CCPLog)
+                .filter(CCPLog.user_id == user_id)
+                .with_entities(func.sum(CCPLog.points_awarded))
+                .scalar()
+            )
 
     @staticmethod
     def get_ccp_logs(user_id):
