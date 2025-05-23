@@ -1,0 +1,56 @@
+<!-- File: chat.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Karmify | Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 text-gray-800">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-indigo-600">Karmify</h1>
+        <nav class="space-x-6">
+          <a href="dashboard.html" class="text-gray-700 hover:text-indigo-600">Dashboard</a>
+          <a href="#" class="text-gray-700 hover:text-indigo-600">Friends</a>
+          <a href="index.html" class="text-gray-700 hover:text-indigo-600">Home</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Chat Section -->
+    <main class="max-w-4xl mx-auto mt-10">
+      <div class="bg-white rounded-lg shadow-md p-6 flex flex-col h-[70vh]">
+        <div class="flex-1 overflow-y-auto space-y-4 mb-4">
+          <!-- Example Messages -->
+          <div class="text-left">
+            <div class="inline-block bg-indigo-100 text-indigo-800 px-4 py-2 rounded-lg">Hello</div>
+          </div>
+          <div class="text-right">
+            <div class="inline-block bg-purple-100 text-purple-800 px-4 py-2 rounded-lg">What's up</div>
+          </div>
+          <div class="text-left">
+            <div class="inline-block bg-indigo-100 text-indigo-800 px-4 py-2 rounded-lg">UWU</div>
+          </div>
+        </div>
+        <form class="flex gap-2">
+          <input
+            type="text"
+            placeholder="Write a message..."
+            class="flex-1 px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-400"
+          />
+          <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">
+            Send
+          </button>
+        </form>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-20 py-6 text-center text-sm text-gray-500">
+      &copy; 2025 Karmify. All rights reserved.
+    </footer>
+  </body>
+</html>

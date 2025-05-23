@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from api.routes.auth_router import oauth2_scheme
 from api.services.jwt import has_role, verify_token
-
+from fastapi.websockets import WebSocket, WebSocketDisconnect
+from typing import List
+from fastapi import Query
 chat_router = APIRouter(prefix="/chat", tags=["chat"])
 
 
-@chat_router.post("/<user_id>/message")
 @chat_router.get("/messages")
 async def get_messages(token: str = Depends(oauth2_scheme)):
     payload = verify_token(token)
