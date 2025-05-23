@@ -2,6 +2,7 @@ from api.models.ccp import CCPLog, CCPCategories
 from api.models.users import UserTable
 from api.services.user_service import User
 from api.db import get_db
+from api.schemas.ccp_schema import CCPReport
 from sqlalchemy import func
 from uuid import UUID
 
@@ -70,7 +71,7 @@ class CCPLogService:
             )
             db.add(self.log)
             db.commit()
-            db.refresh(self.log)
+           
 
 
 class CCPService:
@@ -103,7 +104,7 @@ class CCPService:
         with get_db() as db:
             if not db.query(UserTable).filter(UserTable.id == UUID(user_id)).first():
                 raise ValueError("User not found")
-            return db.query(CCPLog).filter(CCPLog.user_id == user_id).all()
+            return db.query(CCPLog).filter(CCPLog.user_id == UUID(user_id)).all()
 
     @staticmethod
     def get_ccp_log_by_id(log_id):
@@ -117,15 +118,25 @@ class CCPService:
             return log
 
     @staticmethod
-    def create_ccp_log(user_id, log_data):
+    def create_ccp_log(report: CCPReport):
         """
         Create a new CCP log for a specific user.
         """
         with get_db() as db:
-            if not db.query(UserTable).filter(UserTable.id == UUID(user_id)).first():
-                return {"points": 0}
-            log = CCPLog(user_id=UUID(user_id), **log_data)
+            user = db.query(UserTable).filter(UserTable.username == report.reportee).first()
+            if not user:
+                raise ValueError("User not found")
+
+            category = db.query(CCPCategories).filter(CCPCategories.id == report.category_id).first()
+            if not category:
+                raise ValueError("CCP category not found")
+
+            log = CCPLog(
+                user_id=user.id,
+                category_id=category.id,
+                points_awarded=category.points,
+                notes=report.comment,
+            )
             db.add(log)
             db.commit()
-            db.refresh(log)
-            return log
+            
