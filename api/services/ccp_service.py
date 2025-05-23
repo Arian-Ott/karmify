@@ -71,7 +71,6 @@ class CCPLogService:
             )
             db.add(self.log)
             db.commit()
-           
 
 
 class CCPService:
@@ -86,15 +85,17 @@ class CCPService:
         with get_db() as db:
             if not db.query(UserTable).filter(UserTable.id == UUID(user_id)).first():
                 return {"points": 0}
-            qry = list(
+
+            total_points = (
                 db.query(func.sum(CCPLog.points_awarded))
                 .filter(CCPLog.user_id == UUID(user_id))
                 .scalar()
             )
-            print(qry)
-            if qry[0] is None:
+
+            if total_points is None:
                 return {"points": 0}
-            return {"points": qry[0]}
+
+            return {"points": total_points}
 
     @staticmethod
     def get_ccp_logs(user_id):
@@ -123,11 +124,19 @@ class CCPService:
         Create a new CCP log for a specific user.
         """
         with get_db() as db:
-            user = db.query(UserTable).filter(UserTable.username == report.reportee).first()
+            user = (
+                db.query(UserTable)
+                .filter(UserTable.username == report.reportee)
+                .first()
+            )
             if not user:
                 raise ValueError("User not found")
 
-            category = db.query(CCPCategories).filter(CCPCategories.id == report.category_id).first()
+            category = (
+                db.query(CCPCategories)
+                .filter(CCPCategories.id == report.category_id)
+                .first()
+            )
             if not category:
                 raise ValueError("CCP category not found")
 
@@ -139,4 +148,3 @@ class CCPService:
             )
             db.add(log)
             db.commit()
-            
