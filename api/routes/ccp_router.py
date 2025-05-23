@@ -21,4 +21,16 @@ async def get_china_points(token: str = Depends(oauth2_scheme)):
         return {
             "points": 99999
         }  # Hardcoded, since the admin will always have 99999 points.
-    return {"points": ccp_service.get_sum_points(payload["uid"])}
+    return ccp_service.get_sum_points(payload["uid"])
+
+
+@ccp_router.post("/infraction")
+async def report_infraction(
+    token: str = Depends(oauth2_scheme),
+    infraction: str = Depends(),
+):
+    """
+    Report an infraction to the CCP.
+    Misuse of this API is strictly prohibited and will be reported to the authorities.
+    """
+    pass
