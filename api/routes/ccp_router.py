@@ -21,8 +21,8 @@ async def get_china_points(token: str = Depends(oauth2_scheme)):
         raise HTTPException(status_code=401, detail="Invalid token")
     if "admin" in payload["role"]:
         return {
-            "points": 99999
-        }  # Hardcoded, since the admin will always have 99999 points.
+            "points": 999999
+        }  # Hardcoded, since the admin will always have 999.999 points.
     return ccp_service.get_sum_points(payload["uid"])
 
 
