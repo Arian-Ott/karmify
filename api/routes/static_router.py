@@ -54,7 +54,6 @@ async def set_pfp(
     return {"message": "Profile picture uploaded"}
 
 
-
 @static_router.get("/u/{user_id}")
 async def get_pfp(user_id: str):
     path = os.path.join(settings.ASSET_DIR, f"{user_id}.webp")
@@ -75,13 +74,14 @@ async def delete_pfp(user_id, token: str = Depends(oauth2_scheme)):
     os.remove(settings.ASSET_DIR + f"/{user_id}.webp")
     return "image deleted"
 
+
 @static_router.post("/bulk_import")
 async def bulk_import(
     token: str = Depends(oauth2_scheme),
 ):
     data = verify_token(token)
-    if data is None or "admin" not in data.get("role"): 
+    if data is None or "admin" not in data.get("role"):
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
+
     await handler()
     return {"message": "Bulk import completed"}

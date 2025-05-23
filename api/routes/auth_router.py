@@ -49,7 +49,10 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
 
 
 @oauth_router.delete("/me")
-async def delete_current_user(response:Response, token: str = Depends(oauth2_scheme),):
+async def delete_current_user(
+    response: Response,
+    token: str = Depends(oauth2_scheme),
+):
     payload = verify_token(token)
     if not payload:
         raise HTTPException(
@@ -60,10 +63,10 @@ async def delete_current_user(response:Response, token: str = Depends(oauth2_sch
             status_code=status.HTTP_403_FORBIDDEN, detail="Admin cannot delete self"
         )
     user = User.get_by_username(payload["sub"])
-    
+
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     User.delete_user(payload["uid"])
     response.delete_cookie("access_token")
-    
+
     return {"detail": "User deleted"}
