@@ -1,5 +1,5 @@
 from api.db import Base
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, UUID
 from datetime import datetime
 
 
@@ -15,7 +15,7 @@ class CCPCategories(Base):
 class CCPLog(Base):
     __tablename__ = "ccp_logs"
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    user_id = Column(Integer, ForeignKey("users.id"), index=True)
+    user_id = Column(UUID, ForeignKey("users.id"), index=True)
     category_id = Column(Integer, ForeignKey("ccp_categories.id"), index=True)
     date_logged = Column(DateTime, default=datetime.now)
     points_awarded = Column(Integer, default=0)
