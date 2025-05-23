@@ -83,6 +83,7 @@ def add_ccp_categories():
 def create_roles():
     with get_db() as db:
         roles = [
+            RoleTable(name="xijinping", description="xijinping"),
             RoleTable(name="admin", description="Administrator"),
             RoleTable(name="user", description="Regular user"),
             RoleTable(name="guest", description="Guest user"),
