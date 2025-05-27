@@ -5,7 +5,7 @@
 For running the api you need:
 
 * Python3.13 venv 
-* Docker engine
+* Docker engine (optional)
 
 First create a venv using `python3.13 -m venv venv`. 
 
@@ -47,3 +47,9 @@ SECRET_KEY="your_secret_key"
 >  Also change your secret key. It is against any best practices and violates ISO 27001 (A.9, A.10 and A.12) fundamentally.
 >
 > Generate a unique key using `openssl rand -hex 64`
+
+## Troubleshooting
+
+### I have no dummy data
+
+<!--TODO: Add troubleshooting -->
