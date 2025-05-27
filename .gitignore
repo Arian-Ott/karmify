@@ -4,7 +4,7 @@
 **/*.pyc
 **/*.env
 .ruff_cache
-api/data/
+
 
 .github/workflows/
 .gitea/workflows/
