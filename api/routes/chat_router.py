@@ -4,6 +4,7 @@ from api.services.jwt import has_role, verify_token
 from fastapi.websockets import WebSocket, WebSocketDisconnect
 from typing import List
 from fastapi import Query
+
 chat_router = APIRouter(prefix="/chat", tags=["chat"])
 
 

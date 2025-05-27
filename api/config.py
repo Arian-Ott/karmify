@@ -1,4 +1,7 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from fastapi.templating import Jinja2Templates
+
+templates = Jinja2Templates(directory="Karmify")
 
 
 class Settings(BaseSettings):

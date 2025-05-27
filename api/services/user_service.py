@@ -8,6 +8,7 @@ from uuid import UUID
 from . import crypto_context
 import os
 
+
 class User:
     def __init__(self):
         self.username = None
@@ -126,7 +127,7 @@ class User:
                 return []
             print(list(roles))
             return [role.name for role in roles]
-        
+
     @staticmethod
     def delete_user(user_id):
         user_id = UUID(user_id)
