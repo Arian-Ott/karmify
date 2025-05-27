@@ -12,7 +12,7 @@ def read_users_from_csv(path="api/data/users.csv") -> list[dict]:
 
 
 def process_user_image(username: str, user_id: str):
-    source = f"api/data/import/{username}.jpg"
+    source = f"docs/assets/{username}.jpg"
     dest = f"api/data/assets/{user_id}.webp"
     if os.path.exists(source):
         img = Image.open(source).convert("RGB")

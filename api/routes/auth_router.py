@@ -2,7 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from api.services.jwt import create_access_token, verify_token
 from api.services.user_service import User
+from fastapi.requests import Request
 from fastapi.responses import Response
+from fastapi.responses import JSONResponse
+from fastapi.responses import RedirectResponse
 
 oauth_router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -10,7 +13,11 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 
 
 @oauth_router.post("/token")
-async def login(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login(
+    request: Request,
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    target_url: str = None,
+):
     user_data = User.authenticate_user(form_data.username, form_data.password)
     if not user_data:
         raise HTTPException(
@@ -25,7 +32,27 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
             "uid": user_data["user_id"],
         }
     )
-    return {"access_token": access_token, "token_type": "bearer"}
+    if target_url:
+        # If a target URL is provided, redirect to it
+        response = RedirectResponse(
+            url="/" + target_url, status_code=status.HTTP_303_SEE_OTHER
+        )
+    else:
+        # Otherwise, return a JSON response
+        response = JSONResponse(
+            content={"access_token": access_token, "token_type": "bearer"}
+        )
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        max_age=3600,  # 1 hour
+        expires=3600,
+        secure=True,  # set to False for local dev, True in production
+        samesite="Lax",
+        path="/",
+    )
+    return response
 
 
 @oauth_router.post("/logout")

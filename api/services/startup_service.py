@@ -24,7 +24,7 @@ def check_user_exists(username, email):
 def table_creation():
     """Startup event handler."""
     if settings.DEBUG:
-        Base.metadata.drop_all(bind=engine)
+        Base.metadata.create_all(bind=engine)
     Base.metadata.create_all(bind=engine)
 
 
