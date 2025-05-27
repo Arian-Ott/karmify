@@ -65,3 +65,11 @@ async def get_about(request: Request):
     Render the about page.
     """
     return templates.TemplateResponse("about.html", {"request": request})
+
+@html_router.get("/chat", response_class=HTMLResponse)
+async def get_chat(request: Request):
+    """
+    Render the chat page.
+    """
+    
+    return templates.TemplateResponse("chat.html", {"request": request})

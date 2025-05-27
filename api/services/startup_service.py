@@ -7,9 +7,7 @@ from api.db import Base, engine
 from api.config import settings
 from api.models.ccp import CCPCategories
 import pandas as pd
-import os
-import shutil
-import csv
+
 
 
 def check_user_exists(username, email):

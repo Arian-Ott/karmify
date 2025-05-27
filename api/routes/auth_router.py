@@ -55,14 +55,14 @@ async def login(
     return response
 
 
-@oauth_router.post("/logout")
-async def logout(token: str = Depends(oauth2_scheme)):
-    payload = verify_token(token)
-    if not payload:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token"
-        )
-    return {"detail": "Logged out (simulated, token not really invalidated)"}
+@oauth_router.get("/logout")
+async def logout():
+    response = RedirectResponse(
+        url="/login", status_code=status.HTTP_303_SEE_OTHER
+    )
+    response.delete_cookie("access_token")
+    return response
+    
 
 
 @oauth_router.get("/me")
