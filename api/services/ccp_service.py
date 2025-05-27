@@ -5,7 +5,7 @@ from api.db import get_db
 from api.schemas.ccp_schema import CCPReport
 from sqlalchemy import func
 from uuid import UUID
-
+from sqlalchemy.orm import joinedload
 
 class CCPCategoriesService:
     def __init__(self):
@@ -100,12 +100,31 @@ class CCPService:
     @staticmethod
     def get_ccp_logs(user_id):
         """
-        Get all CCP logs for a specific user.
+        Get all CCP logs for a specific user, returned as a list of dictionaries.
         """
+        user_uuid = UUID(user_id)
         with get_db() as db:
-            if not db.query(UserTable).filter(UserTable.id == UUID(user_id)).first():
+            user = db.query(UserTable).filter(UserTable.id == user_uuid).first()
+            if not user:
                 raise ValueError("User not found")
-            return db.query(CCPLog).filter(CCPLog.user_id == UUID(user_id)).all()
+
+            logs = (
+                db.query(CCPLog)
+                .options(joinedload(CCPLog.category))
+                .filter(CCPLog.user_id == user_uuid)
+                .all()
+            )
+
+            return [
+                {
+                    "id": log.id,
+                    "category_name": log.category.category_name if log.category else None,
+                    "points_awarded": log.points_awarded,
+                    "notes": log.notes,
+                    "timestamp": log.date_logged,
+                }
+                for log in logs
+            ]
 
     @staticmethod
     def get_ccp_log_by_id(log_id):

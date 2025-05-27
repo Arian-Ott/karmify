@@ -9,7 +9,6 @@ from api.models.ccp import CCPCategories
 import pandas as pd
 
 
-
 def check_user_exists(username, email):
     with get_db() as db:
         if db.query(UserTable).filter(UserTable.username == username).first():

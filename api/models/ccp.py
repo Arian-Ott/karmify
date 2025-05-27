@@ -1,6 +1,7 @@
 from api.db import Base
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Boolean, UUID
 from datetime import datetime
+from sqlalchemy.orm import relationship
 
 
 class CCPCategories(Base):
@@ -20,3 +21,5 @@ class CCPLog(Base):
     date_logged = Column(DateTime, default=datetime.now)
     points_awarded = Column(Integer, default=0)
     notes = Column(String(255))
+    
+    category = relationship("CCPCategories", backref="logs")
