@@ -5,6 +5,8 @@ from datetime import datetime, timedelta
 from fastapi.exceptions import HTTPException
 from api.services.jwt import verify_token, create_access_token
 from api.config import settings
+
+
 def protected_route(func):
     @wraps(func)
     async def wrapper(request: Request, *args, **kwargs):
@@ -20,7 +22,6 @@ def protected_route(func):
         if not exp or datetime.fromtimestamp(exp) < datetime.now():
             return RedirectResponse(url="/login")
 
-
         if datetime.fromtimestamp(exp) < datetime.now() + timedelta(minutes=10):
             new_token = create_access_token(
                 data={
@@ -28,7 +29,7 @@ def protected_route(func):
                     "role": user.get("role", []),
                     "uid": user["uid"],
                 },
-                expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
+                expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
             )
             response = RedirectResponse(url=request.url.path)
             response.set_cookie("access_token", new_token, httponly=True)

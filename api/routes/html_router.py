@@ -7,9 +7,8 @@ from api.services.jwt import verify_token
 from api.utils.auth_decorators import protected_route
 import requests
 from api.services.ccp_service import CCPService
+
 html_router = APIRouter(tags=["html"])
-
-
 
 
 @html_router.get("/", response_class=HTMLResponse)
@@ -58,10 +57,11 @@ async def get_dashboard(request: Request):
     """
     ccp_service = CCPService()
     user_id = verify_token(request.cookies.get("access_token"))["uid"]
-    karma_list =  ccp_service.get_ccp_logs(user_id)
-    
+    karma_list = ccp_service.get_ccp_logs(user_id)
+
     return templates.TemplateResponse(
-        "dashboard.html", {"request": request, "user": request.state.user, "karma_log": karma_list}
+        "dashboard.html",
+        {"request": request, "user": request.state.user, "karma_log": karma_list},
     )
 
 
@@ -72,13 +72,16 @@ async def get_about(request: Request):
     """
     return templates.TemplateResponse("about.html", {"request": request})
 
+
 @html_router.get("/chat", response_class=HTMLResponse)
+@protected_route
 async def get_chat(request: Request):
     """
     Render the chat page.
     """
-    
+
     return templates.TemplateResponse("chat.html", {"request": request})
+
 
 @html_router.get("/imprint", response_class=HTMLResponse)
 async def get_imprint(request: Request):

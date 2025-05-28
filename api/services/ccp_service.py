@@ -7,6 +7,7 @@ from sqlalchemy import func
 from uuid import UUID
 from sqlalchemy.orm import joinedload
 
+
 class CCPCategoriesService:
     def __init__(self):
         pass
@@ -118,7 +119,9 @@ class CCPService:
             return [
                 {
                     "id": log.id,
-                    "category_name": log.category.category_name if log.category else None,
+                    "category_name": log.category.category_name
+                    if log.category
+                    else None,
                     "points_awarded": log.points_awarded,
                     "notes": log.notes,
                     "timestamp": log.date_logged,

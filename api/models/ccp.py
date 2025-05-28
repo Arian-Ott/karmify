@@ -21,5 +21,5 @@ class CCPLog(Base):
     date_logged = Column(DateTime, default=datetime.now)
     points_awarded = Column(Integer, default=0)
     notes = Column(String(255))
-    
+
     category = relationship("CCPCategories", backref="logs")
