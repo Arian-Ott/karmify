@@ -12,15 +12,21 @@ def protected_route(func):
     async def wrapper(request: Request, *args, **kwargs):
         token = request.cookies.get("access_token")
         if not token:
-            return RedirectResponse(url="/login")
+            resp = RedirectResponse(url="/login", headers={"X-Messages": "You must be logged in to access this page."})
+            resp.set_cookie("messages", "You must be logged in to access this page.", httponly=True, max_age=5, expires=5, secure=False, samesite="Lax", path="/")
+            return resp
 
         user = verify_token(token)
         if not user:
-            return RedirectResponse(url="/login")
+            resp =  RedirectResponse(url="/login")
+            resp.set_cookie("messages", "Invalid token. Please log in again.", httponly=True, max_age=5, expires=5, secure=False, samesite="Lax", path="/")
+            return resp
 
         exp = user.get("exp")
         if not exp or datetime.fromtimestamp(exp) < datetime.now():
-            return RedirectResponse(url="/login")
+            resp = RedirectResponse(url="/login", headers={"X-Messages": "Session expired. Please log in again."})
+            resp.set_cookie("messages", "Session expired. Please log in again.", httponly=True, max_age=5, expires=5, secure=False, samesite="Lax", path="/")
+            return resp
 
         if datetime.fromtimestamp(exp) < datetime.now() + timedelta(minutes=10):
             new_token = create_access_token(
@@ -32,7 +38,7 @@ def protected_route(func):
                 expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
             )
             response = RedirectResponse(url=request.url.path)
-            response.set_cookie("access_token", new_token, httponly=True)
+            response.set_cookie("access_token", new_token, httponly=True, max_age=3600, expires=3600, secure=False, samesite="Lax", path="/")
             return response
 
         request.state.user = user

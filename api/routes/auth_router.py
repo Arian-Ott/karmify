@@ -20,10 +20,9 @@ async def login(
 ):
     user_data = User.authenticate_user(form_data.username, form_data.password)
     if not user_data:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
-        )
-
+        resp = RedirectResponse(url=request.headers.get("Referer", "/login"),status_code=status.HTTP_303_SEE_OTHER) 
+        resp.set_cookie("messages", "Invalid username or password", httponly=True, max_age=5, expires=5, secure=False, samesite="Lax", path="/")
+        return resp
     # Make sure user_data is a dict or Pydantic model, not a detached ORM object
     access_token = create_access_token(
         data={
@@ -48,7 +47,7 @@ async def login(
         httponly=True,
         max_age=3600,  # 1 hour
         expires=3600,
-        secure=True,  # set to False for local dev, True in production
+        secure=False,  # set to False for local dev, True in production
         samesite="Lax",
         path="/",
     )

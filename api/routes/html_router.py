@@ -6,10 +6,11 @@ from api.routes.auth_router import oauth2_scheme
 from api.services.jwt import verify_token
 from api.utils.auth_decorators import protected_route
 import requests
-from api.services.ccp_service import CCPService
+from api.services.ccp_service import CCPService, CCPCategoriesService
+from api.services.user_service import User
 
 html_router = APIRouter(tags=["html"])
-
+ccp_categories_service = CCPCategoriesService()
 
 @html_router.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
@@ -40,9 +41,10 @@ async def get_login(request: Request):
         else:
             # If the user is already logged in, redirect to the dashboard
             return RedirectResponse(url="/dashboard", status_code=303)
-    if request.headers.get("X-Messages"):
+    if request.cookies.get("messages"):
+        print("Messages found in cookies:", request.cookies.get("messages"))
         return templates.TemplateResponse(
-            "login.html", {"request": request, "messages": ["Login successful"]}
+            "login.html", {"request": request, "messages": request.cookies.get("messages")}
         )
     return templates.TemplateResponse("login.html", {"request": request})
 
@@ -58,10 +60,11 @@ async def get_dashboard(request: Request):
     ccp_service = CCPService()
     user_id = verify_token(request.cookies.get("access_token"))["uid"]
     karma_list = ccp_service.get_ccp_logs(user_id)
+    karma_points = ccp_service.get_sum_points(user_id)
 
     return templates.TemplateResponse(
         "dashboard.html",
-        {"request": request, "user": request.state.user, "karma_log": karma_list},
+        {"request": request, "user": request.state.user, "karma_log": karma_list, "karmapoints": karma_points["points"]},
     )
 
 
@@ -89,3 +92,15 @@ async def get_imprint(request: Request):
     Render the imprint page.
     """
     return templates.TemplateResponse("impressum.html", {"request": request})
+
+user_service = User()
+
+@html_router.get("/report", response_class=HTMLResponse)
+@protected_route
+async def report_view(request: Request):
+    """
+    Render the report page.
+    """
+    users = user_service.get_all_users()
+    categories = ccp_categories_service.get_all_categories()
+    return templates.TemplateResponse("report.html", {"request": request, "users": users, "categories": categories})

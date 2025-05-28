@@ -97,7 +97,7 @@ class User:
     @staticmethod
     def get_all_users():
         with get_db() as db:
-            users = db.query(UserTable).all()
+            users = db.query(UserTable).order_by(UserTable.username).all()
             return [
                 UserCreate(
                     username=user.username,

@@ -14,11 +14,23 @@ class CCPCategoriesService:
 
     @staticmethod
     def get_all_categories():
+     
         """
         Get all available CCP categories.
         """
         with get_db() as db:
-            return db.query(CCPCategories).all()
+            categories = db.query(CCPCategories).order_by(CCPCategories.category_name).all()
+            print(f"Found {len(categories)} CCP categories.")
+            return [
+                {
+                    "id": category.id,
+                    "category_name": category.category_name,
+                    "description": category.description,
+                    "is_violation": category.is_violation,
+                    "points": category.points,
+                }
+                for category in categories
+            ]
 
     @staticmethod
     def get_category_by_id(category_id):
