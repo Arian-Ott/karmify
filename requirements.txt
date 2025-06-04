@@ -11,3 +11,5 @@ argon2-cffi
 passlib
 pandas 
 pillow
+requests
+
