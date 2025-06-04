@@ -12,6 +12,7 @@ from api.services.user_service import User
 html_router = APIRouter(tags=["html"])
 ccp_categories_service = CCPCategoriesService()
 
+
 @html_router.get("/", response_class=HTMLResponse)
 async def get_index(request: Request):
     """
@@ -44,7 +45,8 @@ async def get_login(request: Request):
     if request.cookies.get("messages"):
         print("Messages found in cookies:", request.cookies.get("messages"))
         return templates.TemplateResponse(
-            "login.html", {"request": request, "messages": request.cookies.get("messages")}
+            "login.html",
+            {"request": request, "messages": request.cookies.get("messages")},
         )
     return templates.TemplateResponse("login.html", {"request": request})
 
@@ -64,7 +66,12 @@ async def get_dashboard(request: Request):
 
     return templates.TemplateResponse(
         "dashboard.html",
-        {"request": request, "user": request.state.user, "karma_log": karma_list, "karmapoints": karma_points["points"]},
+        {
+            "request": request,
+            "user": request.state.user,
+            "karma_log": karma_list,
+            "karmapoints": karma_points["points"],
+        },
     )
 
 
@@ -93,7 +100,9 @@ async def get_imprint(request: Request):
     """
     return templates.TemplateResponse("impressum.html", {"request": request})
 
+
 user_service = User()
+
 
 @html_router.get("/report", response_class=HTMLResponse)
 @protected_route
@@ -103,4 +112,6 @@ async def report_view(request: Request):
     """
     users = user_service.get_all_users()
     categories = ccp_categories_service.get_all_categories()
-    return templates.TemplateResponse("report.html", {"request": request, "users": users, "categories": categories})
+    return templates.TemplateResponse(
+        "report.html", {"request": request, "users": users, "categories": categories}
+    )

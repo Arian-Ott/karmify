@@ -11,7 +11,6 @@ class CCPCategories(Base):
     description = Column(String(255))
     is_violation = Column(Boolean, default=False)
     points = Column(Integer, default=0)
-    
 
 
 class CCPLog(Base):

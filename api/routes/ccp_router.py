@@ -7,6 +7,7 @@ from uuid import UUID
 from api.utils.auth_decorators import protected_route
 from fastapi import Form, Body
 from fastapi.responses import HTMLResponse, RedirectResponse
+
 ccp_router = APIRouter(prefix="/ccp", tags=["ccp"])
 
 ccp_service = CCPService()
@@ -29,7 +30,6 @@ async def get_china_points(token: str = Depends(oauth2_scheme)):
     return ccp_service.get_sum_points(payload["uid"])
 
 
-
 @ccp_router.post("/infraction")
 @protected_route
 async def report_infraction(
@@ -37,8 +37,7 @@ async def report_infraction(
     reportee: str = Form(...),
     category_id: int = Form(...),
     comment: str = Form(...),
-   
-): 
+):
     """
     Report an infraction to the CCP.
     Misuse of this API is strictly prohibited and will be reported to the authorities.
@@ -55,7 +54,9 @@ async def report_infraction(
     )
     ccp_service.create_ccp_log(infraction)
     response = RedirectResponse(
-        url="/dashboard", status_code=303, headers={"X-Messages": "Infraction reported successfully"}
+        url="/dashboard",
+        status_code=303,
+        headers={"X-Messages": "Infraction reported successfully"},
     )
     response.set_cookie(
         key="access_token",

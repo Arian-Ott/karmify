@@ -20,8 +20,20 @@ async def login(
 ):
     user_data = User.authenticate_user(form_data.username, form_data.password)
     if not user_data:
-        resp = RedirectResponse(url=request.headers.get("Referer", "/login"),status_code=status.HTTP_303_SEE_OTHER) 
-        resp.set_cookie("messages", "Invalid username or password", httponly=True, max_age=5, expires=5, secure=False, samesite="Lax", path="/")
+        resp = RedirectResponse(
+            url=request.headers.get("Referer", "/login"),
+            status_code=status.HTTP_303_SEE_OTHER,
+        )
+        resp.set_cookie(
+            "messages",
+            "Invalid username or password",
+            httponly=True,
+            max_age=5,
+            expires=5,
+            secure=False,
+            samesite="Lax",
+            path="/",
+        )
         return resp
     # Make sure user_data is a dict or Pydantic model, not a detached ORM object
     access_token = create_access_token(
