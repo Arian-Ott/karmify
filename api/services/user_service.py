@@ -8,6 +8,7 @@ from uuid import UUID
 from . import crypto_context
 import os
 
+
 class User:
     def __init__(self):
         self.username = None
@@ -96,7 +97,7 @@ class User:
     @staticmethod
     def get_all_users():
         with get_db() as db:
-            users = db.query(UserTable).all()
+            users = db.query(UserTable).order_by(UserTable.username).all()
             return [
                 UserCreate(
                     username=user.username,
@@ -126,7 +127,7 @@ class User:
                 return []
             print(list(roles))
             return [role.name for role in roles]
-        
+
     @staticmethod
     def delete_user(user_id):
         user_id = UUID(user_id)

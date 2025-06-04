@@ -4,17 +4,20 @@ import csv
 import os
 from PIL import Image
 
+
 def read_users_from_csv(path="api/data/users.csv") -> list[dict]:
     with open(path, mode="r", encoding="utf-8") as file:
         reader = csv.DictReader(file, delimiter=";")
         return list(reader)
 
+
 def process_user_image(username: str, user_id: str):
-    source = f"api/data/import/{username}.jpg"
+    source = f"docs/assets/{username}.jpg"
     dest = f"api/data/assets/{user_id}.webp"
     if os.path.exists(source):
         img = Image.open(source).convert("RGB")
         img.save(dest, "WEBP", quality=85)
+
 
 async def handler():
     users = read_users_from_csv()

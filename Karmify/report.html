@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karmify | Your Title Here</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+          <h1 class="text-2xl font-bold text-indigo-600">Karmify</h1>
+          <nav class="space-x-6">
+            <a href="/" class="text-gray-700 hover:text-indigo-600">Home</a>
+            <a href="/login" class="text-gray-700 hover:text-indigo-600">Login</a>
+            <a href="/about" class="text-gray-700 hover:text-indigo-600">About</a>
+            <a href="/imprint" class="text-gray-700 hover:text-indigo-600">Impressum</a>
+          </nav>
+        </div>
+      </header>
+    <div class="max-w-6xl mx-auto px-4 py-8">
+        <form method="POST" action="/ccp/infraction" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <label for="reportee" class="block text-gray-700 text-sm font-bold mb-2">Choose a user to report:</label>
+            <select id="reportee" name="reportee" required class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <option value="" disabled selected>Select an option</option>
+                {% for user in users %}
+                <option value="{{ user.username }}">{{ user.username }}</option>
+                {% endfor %}
+            </select>
+        
+            <label for="category_id" class="block text-gray-700 text-sm font-bold mb-2">Choose a Category:</label>
+            <select id="category_id" name="category_id" required class="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline">
+                <option value="" disabled selected>Select an option</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.category_name }}</option>
+                {% endfor %}
+            </select>
+        
+            <label for="comment" class="block text-gray-700 text-sm font-bold mt-4 mb-2">Reason for reporting:</label>
+            <textarea id="comment" name="comment" rows="4" required class="block w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 rounded shadow leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter your reason here..."></textarea>
+        
+            <button type="submit" class="mt-4 bg-indigo-600 text-white font-bold py-2 px-4 rounded hover:bg-indigo-700 focus:outline-none focus:shadow-outline">
+                Submit 🇨🇳 
+            </button>
+        </form>
+    </div>
+</body>
+</html>

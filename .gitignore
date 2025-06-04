@@ -4,7 +4,8 @@
 **/*.pyc
 **/*.env
 .ruff_cache
-api/data/assets/*
-!api/data/assets/nnonftscam.png
+
+
 .github/workflows/
 .gitea/workflows/
+.DS_Store

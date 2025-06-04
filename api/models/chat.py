@@ -11,7 +11,8 @@ class DMTable(Base):
     user2_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), index=True)
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
-    
+
+
 class DMMessageTable(Base):
     __tablename__ = "dm_messages"
     id = Column(Integer, primary_key=True, index=True)
@@ -20,4 +21,3 @@ class DMMessageTable(Base):
     content = Column(String(1024))
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
-    
